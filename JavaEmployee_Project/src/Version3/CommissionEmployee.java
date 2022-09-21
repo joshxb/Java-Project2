@@ -25,6 +25,7 @@ public class CommissionEmployee extends Employee {
     }
 
     //    Compute the salary
+    @Override
     public double computeSalary() {
         float rate;
         if (totalSales >= 0 && totalSales < 10_000) {
