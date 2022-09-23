@@ -1,9 +1,8 @@
 package Version3;
 
-public class Employee extends EmployeeRoster {
-
-    private int empID;
-    private String empName;
+public class Employee{
+    int empID;
+    String empName;
 
     public Employee() {
     }
