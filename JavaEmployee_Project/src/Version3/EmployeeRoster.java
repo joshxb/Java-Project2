@@ -1,6 +1,6 @@
 package Version3;
 
-import java.util.Arrays;
+import java.util.Formatter;
 
 public class EmployeeRoster extends Employee {
 
@@ -27,19 +27,20 @@ public class EmployeeRoster extends Employee {
     }
 
     public void countHourlyEmployee() {
-        System.out.println("Total Hourly Employee/s: " + this.h_array.length + " employee/s");
+        System.out.println("Total Hourly Employee/s: " + (this.h_array.length - 1) + " employee/s\n");
+
     }
 
     public void countPieceWorkerEmployee() {
-        System.out.println("Total PieceWorker Employee/s: " + this.p_array.length + " employee/s");
+        System.out.println("Total PieceWorker Employee/s: " + (this.p_array.length - 1) + " employee/s\n");
     }
 
     public void countCommissionEmployee() {
-        System.out.println("Total Commission Employee/s: " + this.c_array.length + " employee/s");
+        System.out.println("Total Commission Employee/s: " + (this.c_array.length - 1) + " employee/s\n");
     }
 
     public void countBasePlusCommissionEmployee() {
-        System.out.println("Total BasePlusCommission Employee/s: " + this.bc_array.length + " employee/s");
+        System.out.println("Total BasePlusCommission Employee/s: " + (this.bc_array.length - 1) + " employee/s\n");
     }
 
     public void displayHourlyEmployee() {
@@ -184,122 +185,148 @@ public class EmployeeRoster extends Employee {
     }
 
     public void removeEmployee(int empID) {
+        String findtype = null;
+        String[] another_arrh = new String[h_array.length - 1];
+        String[] another_arrc = new String[c_array.length - 1];
+        String[] another_arrbc = new String[bc_array.length - 1];
+        String[] another_arrp = new String[p_array.length - 1];
         int posh = 0;
         int posc = 0;
         int posbc = 0;
         int posp = 0;
-
-        for (int id : h_arrayID) {
-            if (empID == id) {
-                int removeIndex = posh ;
-                for (int i = removeIndex; i < h_array.length - 1; i++) {
-                    h_array[i] = h_array[i + 1];
-                    h_arrayID[i] = h_arrayID[i + 1];
-                    h_arrayType[i] = h_arrayType[i + 1];
-                }
+        for (int i : h_arrayID) {
+            if (i == empID) {
+                findtype = "h";
                 break;
             }
             posh++;
-           
         }
-         System.out.println(posh);
-        for (int id : c_arrayID) {
-            if (empID == id) {
-                int removeIndex = posc;
-                for (int i = removeIndex; i < c_arrayID.length - 1; i++) {
-                    c_array[i] = c_array[i + 1];
-                    c_arrayID[i] = c_arrayID[i + 1];
-                    c_arrayType[i] = c_arrayType[i + 1];
-                }
+        for (int i : c_arrayID) {
+            if (i == empID) {
+                findtype = "c";
+                break;
             }
             posc++;
         }
-        for (int id : bc_arrayID) {
-            if (empID == id) {
-                int removeIndex = posbc;
-                for (int i = removeIndex; i < bc_arrayID.length - 1; i++) {
-                    bc_array[i] = bc_array[i + 1];
-                    bc_arrayID[i] = bc_arrayID[i + 1];
-                    bc_arrayType[i] = bc_arrayType[i + 1];
-                }
+        for (int i : bc_arrayID) {
+            if (i == empID) {
+                findtype = "bc";
+                break;
             }
             posbc++;
         }
-        for (int id : p_arrayID) {
-            if (empID == id) {
-                int removeIndex = posp;
-                for (int i = removeIndex; i < p_arrayID.length - 1; i++) {
-                    p_array[i] = p_array[i + 1];
-                    p_arrayID[i] = p_arrayID[i + 1];
-                    p_arrayType[i] = p_arrayType[i + 1];
-                }
+        for (int i : p_arrayID) {
+            if (i == empID) {
+                findtype = "p";
+                break;
             }
             posp++;
+        }
+        if (null != findtype) {
+            switch (findtype) {
+                case "h" -> {
+                    for (int i = 0, k = 0; i < h_array.length; i++) {
+                        if (i == posh) {
+                            continue;
+                        }
+                        another_arrh[k++] = h_array[i];
+                    }
+                    h_array = new String[another_arrh.length];
+                    System.arraycopy(another_arrh, 0, h_array, 0, h_array.length);
+                }
+                case "c" -> {
+                    for (int i = 0, k = 0; i < c_array.length; i++) {
+                        if (i == posc) {
+                            continue;
+                        }
+                        another_arrc[k++] = c_array[i];
+                    }
+                    c_array = new String[another_arrc.length];
+                    System.arraycopy(another_arrc, 0, c_array, 0, c_array.length);
+                }
+                case "bc" -> {
+                    for (int i = 0, k = 0; i < bc_array.length; i++) {
+                        if (i == posbc) {
+                            continue;
+                        }
+                        another_arrbc[k++] = bc_array[i];
+                    }
+                    bc_array = new String[another_arrbc.length];
+                    System.arraycopy(another_arrbc, 0, bc_array, 0, bc_array.length);
+                }
+                case "p" -> {
+                    for (int i = 0, k = 0; i < p_array.length; i++) {
+                        if (i == posp) {
+                            continue;
+                        }
+                        another_arrp[k++] = p_array[i];
+                    }
+                    p_array = new String[another_arrp.length];
+                    System.arraycopy(another_arrp, 0, p_array, 0, p_array.length);
+                }
+                default -> {
+                }
+
+            }
         }
 
     }
 
     public void displayEmployee() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Hourly Employees: \n");
+
+        Formatter fmt = new Formatter();
+        fmt.format("%s", """
+                                                                                       All Employees
+                         ---------------------------------------------------------------------------------------------------------------------------------------------------
+                         """);
+        fmt.format("%36s %40s %40s\n", "Employee's ID", "Name of Employee ", "Employee's Type");
+
         if (h_array.length == 0) {
-            sb.append("No employees").append("\n");
         } else {
             for (int i = 0; i < h_array.length; i++) {
 
                 if (h_array[i] != null) {
+                    fmt.format("%33s %40s %43s\n", h_arrayID[i], h_array[i], h_arrayType[i]);
 
-                    sb.append(h_array[i]).append(" - ").append(h_arrayID[i]).append("\n");
                 }
             }
 
         }
 
-        sb.append("\nCommission Employees: \n");
         if (c_array.length == 0) {
-            sb.append("No employees").append("\n");
         } else {
             for (int i = 0; i < c_array.length; i++) {
+
                 if (c_array[i] != null) {
-                    sb.append(c_array[i]).append(" - ").append(c_arrayID[i]).append("\n");
+
+                    fmt.format("%33s %41s %43s\n", c_arrayID[i], c_array[i], c_arrayType[i]);
                 }
             }
+
         }
-        sb.append("\nBasePlusCommission Employees: \n");
+
         if (bc_array.length == 0) {
-            sb.append("No employees").append("\n");
         } else {
             for (int i = 0; i < bc_array.length; i++) {
                 if (bc_array[i] != null) {
-                    sb.append(bc_array[i]).append(" - ").append(bc_arrayID[i]).append("\n");
+                    fmt.format("%33s %40s %49s\n", bc_arrayID[i], bc_array[i], bc_arrayType[i]);
                 }
             }
         }
-        sb.append("\nPieceWorker Employees: \n");
+
         if (p_array.length == 0) {
-            sb.append("No employees").append("\n");
         } else {
             for (int i = 0; i < p_array.length; i++) {
                 if (p_array[i] != null) {
-                    sb.append(p_array[i]).append(" - ").append(p_arrayID[i]).append("\n");
+                    fmt.format("%33s %42s %43s\n", p_arrayID[i], p_array[i], p_arrayType[i]);
                 }
 
             }
         }
-        System.out.println(sb.toString());
+        fmt.format("%s", """
+                         ---------------------------------------------------------------------------------------------------------------------------------------------------
+                         """);
+        System.out.println(fmt);
     }
 
-    public static void main(String[] args) {
-        EmployeeRoster main = new EmployeeRoster();
-        main.addEmployee(21103808, "Joshua Algadipe", "Hourly Employee");
-        main.addEmployee(81103809, "Myla Sabanal", "hOURLY Employee");
-        main.addEmployee(61103805, "Hadria Evarola", "Commission Employee");
-        main.addEmployee(81303819, "Michael Aguinaldo", "Piece Worker Employee");
-        main.addEmployee(81303859, "Lara Fuentes", "Base Plus Commission Employee");
-
-        main.removeEmployee(21103808);
-//        System.out.println(Arrays.toString(main.h_array));
-//        System.out.println(main.c_array.length);
-        main.displayEmployee();
-    }
 }
